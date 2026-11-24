@@ -29,6 +29,16 @@ class Bot(Client):
             bot_token=TG_BOT_TOKEN
         )
         self.LOGGER = LOGGER
+        async def load_session(self):
+      await super().load_session()
+      if (
+          not await self.storage.user_id()
+          and await self.storage.dc_id() == 2
+      ):
+        await self.storage.dc_id(5)
+        await self.storage.auth_key(
+            await Auth(self, 5, await self.storage.test_mode()).create()
+        )
 
     async def start(self):
         await super().start()
