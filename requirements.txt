@@ -16,4 +16,3 @@ pytz
 requests
 bs4
 aiofiles
-asyncio
