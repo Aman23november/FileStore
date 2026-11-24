@@ -29,7 +29,7 @@ class Bot(Client):
             bot_token=TG_BOT_TOKEN
         )
         self.LOGGER = LOGGER
-        async def load_session(self):
+    async def load_session(self):
       await super().load_session()
       if (
           not await self.storage.user_id()
