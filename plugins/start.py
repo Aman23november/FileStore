@@ -65,6 +65,33 @@ async def start_command(client: Client, message: Message):
             base64_string = text.split(" ", 1)[1]
         except IndexError:
             return
+        is_verified = False
+        if base64_string.startswith("verify_"):
+            base64_string = base64_string[len("verify_"):]
+            is_verified = True
+
+        is_prem = await db.is_premium_user(user_id)
+
+        if not is_prem and not is_verified:
+            verify_bot_link = f"https://t.me/{client.username}?start=verify_{base64_string}"
+            short_url, provider_used = await get_rotated_short_link(user_id, verify_bot_link)
+
+            if short_url:
+                buttons = [
+                    [
+                        InlineKeyboardButton("🎀Download🎀", url=short_url),
+                        InlineKeyboardButton("Tutorial", url=TUTORIAL_URL),
+                    ],
+                    [
+                        InlineKeyboardButton("Premium", url=PREMIUM_URL),
+                    ],
+                ]
+                return await message.reply_photo(
+                    photo=VERIFY_PIC,
+                    caption="👇 Click Here To Download",
+                    reply_markup=InlineKeyboardMarkup(buttons),
+                    quote=True,
+                )
 
         string = await decode(base64_string)
         argument = string.split("-")
