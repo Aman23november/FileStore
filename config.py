@@ -40,8 +40,8 @@ START_PIC = os.environ.get("START_PIC", "https://ibb.co/PZ0xxDNV")
 FORCE_PIC = os.environ.get("FORCE_PIC", "https://ibb.co/6007Sh86")
 
 #--------------------------------------------
-SHORTLINK_URL = os.environ.get("SHORTLINK_URL", "arolinks.com")
-SHORTLINK_API = os.environ.get("SHORTLINK_API", "110ceac80415c142239e129e1f7fba982c7c363e")
+SHORTLINK_URL = os.environ.get("SHORTLINK_URL", "gplinks.com")
+SHORTLINK_API = os.environ.get("SHORTLINK_API", "0608067dd9c0338bde749ced9a120076f4e48dd8")
 TUT_VID = os.environ.get("TUT_VID","https://t.me/howto0penlinkss/35")
 SHORT_MSG = "<b>👇𝗖𝗹𝗶𝗰𝗸 𝗼𝗻 𝗗𝗼𝘄𝗻𝗹𝗼𝗮𝗱 𝗕𝘂𝘁𝘁𝗼𝗻</b>"
 
