@@ -31,6 +31,9 @@ class Rohit:
         self.fsub_data = self.database['fsub']   
         self.rqst_fsub_data = self.database['request_forcesub']
         self.rqst_fsub_Channel_data = self.database['request_forcesub_channel']
+self.shortener_data = self.database['shortener_users']
+self.premium_data = self.database['premium_users']
+
         
 
 
