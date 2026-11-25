@@ -42,7 +42,7 @@ self.premium_data = self.database['premium_users']
         found = await self.user_data.find_one({'_id': user_id})
         return bool(found)
 
-   async def add_user(self, user_id: int):
+    async def add_user(self, user_id: int):
         await self.user_data.insert_one({'_id': user_id})
         return
 
