@@ -197,5 +197,33 @@ self.premium_data = self.database['premium_users']
             #print(f"Channel {channel_id} NOT found in the database.")
             return False
 
+# SHORTENER ROTATION COUNTER (LOW STORAGE: ONLY _id AND count)
+async def get_short_count(self, user_id: int) -> int:
+    doc = await self.shortener_data.find_one({'_id': int(user_id)})
+    return int(doc.get('count', 0)) if doc else 0
+
+async def inc_short_count(self, user_id: int):
+    await self.shortener_data.update_one(
+        {'_id': int(user_id)},
+        {'$inc': {'count': 1}},
+        upsert=True
+    )
+
+# PREMIUM USER MANAGEMENT
+async def is_premium_user(self, user_id: int) -> bool:
+    found = await self.premium_data.find_one({'_id': int(user_id)})
+    return bool(found)
+
+async def add_premium_user(self, user_id: int):
+    if not await self.is_premium_user(user_id):
+        await self.premium_data.insert_one({'_id': int(user_id)})
+
+async def remove_premium_user(self, user_id: int):
+    if await self.is_premium_user(user_id):
+        await self.premium_data.delete_one({'_id': int(user_id)})
+
+async def get_all_premium_users(self) -> list:
+    docs = await self.premium_data.find().to_list(length=None)
+    return [doc['_id'] for doc in docs]
 
 db = Rohit(DB_URI, DB_NAME)
