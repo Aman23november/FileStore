@@ -53,7 +53,7 @@ GPLINKS_URL = os.environ.get("GPLINKS_URL", "gplinks.com")
 GPLINKS_API = os.environ.get("GPLINKS_API", "YOUR_GPLINKS_API_KEY")
 
 TUTORIAL_URL = os.environ.get("TUTORIAL_URL", "https://t.me/howto0penlinkss/35")
-PREMIUM_URL = os.environ.get("PREMIUM_URL", https://t.me/howto0penlinkss/35")
+PREMIUM_URL = os.environ.get("PREMIUM_URL", "https://t.me/howto0penlinkss/35")
 VERIFY_PIC = os.environ.get("VERIFY_PIC", "https://ibb.co/PZ0xxDNV")
 
 #--------------------------------------------
