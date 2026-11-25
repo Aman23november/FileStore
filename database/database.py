@@ -17,7 +17,6 @@ logging.basicConfig(level=logging.INFO)
 
 
 class Rohit:
-
     def __init__(self, DB_URI, DB_NAME):
         self.dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URI)
         self.database = self.dbclient[DB_NAME]
@@ -28,14 +27,11 @@ class Rohit:
         self.banned_user_data = self.database['banned_user']
         self.autho_user_data = self.database['autho_user']
         self.del_timer_data = self.database['del_timer']
-        self.fsub_data = self.database['fsub']   
+        self.fsub_data = self.database['fsub']
         self.rqst_fsub_data = self.database['request_forcesub']
         self.rqst_fsub_Channel_data = self.database['request_forcesub_channel']
-self.shortener_data = self.database['shortener_users']
-self.premium_data = self.database['premium_users']
-
-        
-
+        self.shortener_data = self.database['shortener_users']
+        self.premium_data = self.database['premium_users']
 
     # USER DATA
     async def present_user(self, user_id: int):
@@ -64,20 +60,20 @@ self.premium_data = self.database['premium_users']
         await self.admins_data.insert_one({'_id': admin_id})
         return
 
+    async def add_admin_if_not_exists(self, admin_id: int):
         if not await self.admin_exist(admin_id):
             await self.admins_data.insert_one({'_id': admin_id})
-            return
+        return
 
     async def del_admin(self, admin_id: int):
         if await self.admin_exist(admin_id):
             await self.admins_data.delete_one({'_id': admin_id})
-            return
+        return
 
     async def get_all_admins(self):
         users_docs = await self.admins_data.find().to_list(length=None)
         user_ids = [doc['_id'] for doc in users_docs]
         return user_ids
-
 
     # BAN USER DATA
     async def ban_user_exist(self, user_id: int):
@@ -87,22 +83,20 @@ self.premium_data = self.database['premium_users']
     async def add_ban_user(self, user_id: int):
         if not await self.ban_user_exist(user_id):
             await self.banned_user_data.insert_one({'_id': user_id})
-            return
+        return
 
     async def del_ban_user(self, user_id: int):
         if await self.ban_user_exist(user_id):
             await self.banned_user_data.delete_one({'_id': user_id})
-            return
+        return
 
     async def get_ban_users(self):
         users_docs = await self.banned_user_data.find().to_list(length=None)
         user_ids = [doc['_id'] for doc in users_docs]
         return user_ids
 
-
-
     # AUTO DELETE TIMER SETTINGS
-    async def set_del_timer(self, value: int):        
+    async def set_del_timer(self, value: int):
         existing = await self.del_timer_data.find_one({})
         if existing:
             await self.del_timer_data.update_one({}, {'$set': {'value': value}})
@@ -115,7 +109,6 @@ self.premium_data = self.database['premium_users']
             return data.get('value', 600)
         return 0
 
-
     # CHANNEL MANAGEMENT
     async def channel_exist(self, channel_id: int):
         found = await self.fsub_data.find_one({'_id': channel_id})
@@ -124,20 +117,19 @@ self.premium_data = self.database['premium_users']
     async def add_channel(self, channel_id: int):
         if not await self.channel_exist(channel_id):
             await self.fsub_data.insert_one({'_id': channel_id})
-            return
+        return
 
     async def rem_channel(self, channel_id: int):
         if await self.channel_exist(channel_id):
             await self.fsub_data.delete_one({'_id': channel_id})
-            return
+        return
 
     async def show_channels(self):
         channel_docs = await self.fsub_data.find().to_list(length=None)
         channel_ids = [doc['_id'] for doc in channel_docs]
         return channel_ids
 
-    
-# Get current mode of a channel
+    # Get current mode of a channel
     async def get_channel_mode(self, channel_id: int):
         data = await self.fsub_data.find_one({'_id': channel_id})
         return data.get("mode", "off") if data else "off"
@@ -151,8 +143,7 @@ self.premium_data = self.database['premium_users']
         )
 
     # REQUEST FORCE-SUB MANAGEMENT
-
-    # Add the user to the set of users for a   specific channel
+    # Add the user to the set of users for a specific channel
     async def req_user(self, channel_id: int, user_id: int):
         try:
             await self.rqst_fsub_Channel_data.update_one(
@@ -163,12 +154,11 @@ self.premium_data = self.database['premium_users']
         except Exception as e:
             print(f"[DB ERROR] Failed to add user to request list: {e}")
 
-
     # Method 2: Remove a user from the channel set
     async def del_req_user(self, channel_id: int, user_id: int):
         # Remove the user from the set of users for the channel
         await self.rqst_fsub_Channel_data.update_one(
-            {'_id': channel_id}, 
+            {'_id': channel_id},
             {'$pull': {'user_ids': user_id}}
         )
 
@@ -182,50 +172,50 @@ self.premium_data = self.database['premium_users']
             return bool(found)
         except Exception as e:
             print(f"[DB ERROR] Failed to check request list: {e}")
-            return False  
-
+            return False
 
     # Method to check if a channel exists using show_channels
     async def reqChannel_exist(self, channel_id: int):
-    # Get the list of all channel IDs from the database
+        # Get the list of all channel IDs from the database
         channel_ids = await self.show_channels()
-        #print(f"All channel IDs in the database: {channel_ids}")
+        # print(f"All channel IDs in the database: {channel_ids}")
 
-    # Check if the given channel_id is in the list of channel IDs
+        # Check if the given channel_id is in the list of channel IDs
         if channel_id in channel_ids:
-            #print(f"Channel {channel_id} found in the database.")
+            # print(f"Channel {channel_id} found in the database.")
             return True
         else:
-            #print(f"Channel {channel_id} NOT found in the database.")
+            # print(f"Channel {channel_id} NOT found in the database.")
             return False
 
-# SHORTENER ROTATION COUNTER (LOW STORAGE: ONLY _id AND count)
-async def get_short_count(self, user_id: int) -> int:
-    doc = await self.shortener_data.find_one({'_id': int(user_id)})
-    return int(doc.get('count', 0)) if doc else 0
+    # SHORTENER ROTATION COUNTER (LOW STORAGE: ONLY _id AND count)
+    async def get_short_count(self, user_id: int) -> int:
+        doc = await self.shortener_data.find_one({'_id': int(user_id)})
+        return int(doc.get('count', 0)) if doc else 0
 
-async def inc_short_count(self, user_id: int):
-    await self.shortener_data.update_one(
-        {'_id': int(user_id)},
-        {'$inc': {'count': 1}},
-        upsert=True
-    )
+    async def inc_short_count(self, user_id: int):
+        await self.shortener_data.update_one(
+            {'_id': int(user_id)},
+            {'$inc': {'count': 1}},
+            upsert=True
+        )
 
-# PREMIUM USER MANAGEMENT
-async def is_premium_user(self, user_id: int) -> bool:
-    found = await self.premium_data.find_one({'_id': int(user_id)})
-    return bool(found)
+    # PREMIUM USER MANAGEMENT
+    async def is_premium_user(self, user_id: int) -> bool:
+        found = await self.premium_data.find_one({'_id': int(user_id)})
+        return bool(found)
 
-async def add_premium_user(self, user_id: int):
-    if not await self.is_premium_user(user_id):
-        await self.premium_data.insert_one({'_id': int(user_id)})
+    async def add_premium_user(self, user_id: int):
+        if not await self.is_premium_user(user_id):
+            await self.premium_data.insert_one({'_id': int(user_id)})
 
-async def remove_premium_user(self, user_id: int):
-    if await self.is_premium_user(user_id):
-        await self.premium_data.delete_one({'_id': int(user_id)})
+    async def remove_premium_user(self, user_id: int):
+        if await self.is_premium_user(user_id):
+            await self.premium_data.delete_one({'_id': int(user_id)})
 
-async def get_all_premium_users(self) -> list:
-    docs = await self.premium_data.find().to_list(length=None)
-    return [doc['_id'] for doc in docs]
+    async def get_all_premium_users(self) -> list:
+        docs = await self.premium_data.find().to_list(length=None)
+        return [doc['_id'] for doc in docs]
+
 
 db = Rohit(DB_URI, DB_NAME)
