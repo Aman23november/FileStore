@@ -46,11 +46,11 @@ TUT_VID = os.environ.get("TUT_VID","https://t.me/howto0penlinkss/35")
 SHORT_MSG = "<b>👇𝗖𝗹𝗶𝗰𝗸 𝗼𝗻 𝗗𝗼𝘄𝗻𝗹𝗼𝗮𝗱 𝗕𝘂𝘁𝘁𝗼𝗻</b>"
 
 SHORTENER_PIC = os.environ.get("SHORTENER_PIC", "https://ibb.co/PZ0xxDNV")
-INSHORT_URL = os.environ.get("INSHORT_URL", "inshorturl.com")
-INSHORT_API = os.environ.get("INSHORT_API", "YOUR_INSHORT_API_KEY")
+INSHORT_URL = os.environ.get("INSHORT_URL", "arolinks.com")
+INSHORT_API = os.environ.get("INSHORT_API", "110ceac80415c142239e129e1f7fba982c7c363e")
 
 GPLINKS_URL = os.environ.get("GPLINKS_URL", "gplinks.com")
-GPLINKS_API = os.environ.get("GPLINKS_API", "YOUR_GPLINKS_API_KEY")
+GPLINKS_API = os.environ.get("GPLINKS_API", "0608067dd9c0338bde749ced9a120076f4e48dd8")
 
 TUTORIAL_URL = os.environ.get("TUTORIAL_URL", "https://t.me/howto0penlinkss/35")
 PREMIUM_URL = os.environ.get("PREMIUM_URL", "https://t.me/howto0penlinkss/35")
