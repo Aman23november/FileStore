@@ -25,6 +25,7 @@ from bot import Bot
 from config import *
 from helper_func import *
 from database.database import *
+from shortener import get_rotated_short_link
 
 BAN_SUPPORT = f"{BAN_SUPPORT}"
 
