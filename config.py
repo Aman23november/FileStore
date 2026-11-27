@@ -49,8 +49,8 @@ SHORTENER_PIC = os.environ.get("SHORTENER_PIC", "https://ibb.co/PZ0xxDNV")
 INSHORT_URL = os.environ.get("INSHORT_URL", "arolinks.com")
 INSHORT_API = os.environ.get("INSHORT_API", "110ceac80415c142239e129e1f7fba982c7c363e")
 
-GPLINKS_URL = os.environ.get("GPLINKS_URL", "gplinks.com")
-GPLINKS_API = os.environ.get("GPLINKS_API", "0608067dd9c0338bde749ced9a120076f4e48dd8")
+GPLINKS_URL = os.environ.get("GPLINKS_URL", "vplink.in")
+GPLINKS_API = os.environ.get("GPLINKS_API", "d0a95011a4d8676ccea6fb2652c640dac6adf7fc")
 
 TUTORIAL_URL = os.environ.get("TUTORIAL_URL", "https://t.me/howto0penlinkss/35")
 PREMIUM_URL = os.environ.get("PREMIUM_URL", "https://t.me/LeviAura")
